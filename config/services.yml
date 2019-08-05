@@ -1,0 +1,9 @@
+services:
+    ady.changecover.controller:
+        class: ady\changecover\controller\main
+        arguments:
+            - '@config'
+            - '@controller.helper'
+            - '@template'
+            - '@user'
+            - '@request'
