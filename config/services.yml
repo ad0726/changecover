@@ -7,5 +7,6 @@ services:
             - '@template'
             - '@user'
             - '@auth'
+            - '@dbal.conn'
             - '@request'
-            - '@db'
+            - '%core.table_prefix%'

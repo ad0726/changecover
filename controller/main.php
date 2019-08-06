@@ -27,7 +27,10 @@ class main
 	protected $auth;
 
 	/** \phpbb\db\driver\driver_interface */
-	protected $db;
+    protected $db;
+
+	/** @var string table_prefix */
+	protected $table_prefix;
 
     /**
      * Constructor
@@ -39,6 +42,8 @@ class main
 	 * @param \phpbb\auth\auth		            $auth
      * @param \phpbb\db\driver\driver_interface $db
      * @param \phpbb\request\request_interface  $request
+	 * @param string                            $table_prefix
+     *
      */
     public function __construct(
         \phpbb\config\config $config,
@@ -47,15 +52,17 @@ class main
         \phpbb\user $user,
         \phpbb\auth\auth $auth,
         \phpbb\db\driver\driver_interface $db,
-        \phpbb\request\request_interface $request)
+        \phpbb\request\request_interface $request,
+        $table_prefix)
     {
-        $this->config   = $config;
-        $this->helper   = $helper;
-        $this->template = $template;
-        $this->user     = $user;
-        $this->auth     = $auth;
-        $this->db       = $db;
-        $this->request  = $request;
+        $this->config       = $config;
+        $this->helper       = $helper;
+        $this->template     = $template;
+        $this->user         = $user;
+        $this->auth         = $auth;
+        $this->db           = $db;
+        $this->request      = $request;
+        $this->table_prefix = $table_prefix;
     }
 
     /**
@@ -93,15 +100,15 @@ class main
                     "user_id"     => $this->user->data['user_id']
                 ];
 
-                // $sql = 'INSERT INTO ' . $this->mchat_settings->get_table_mchat_sessions() . ' ' . $this->db->sql_build_array('INSERT', [
-                //     'user_id'			=> (int) $this->user->data['user_id'],
-                //     'user_ip'			=> $this->user->ip,
-                //     'user_lastupdate'	=> time(),
-                // ]);
-                // $this->db->sql_query($sql);
-                // d($this->db->get_db_name());
+                $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_tobeapproved ' . $this->db->sql_build_array('INSERT', $dataToDB);
+
+                if (!$this->db->sql_query($sql)) {
+                    return $this->helper->render('error.html');
+                } else {
+                    return $this->helper->render('request_success.html');
+                }
             } else {
-                d("todo: error");
+                return $this->helper->render('error.html');
             }
         }
 

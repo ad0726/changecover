@@ -1,3 +1,4 @@
 store/*
 !store/.gitkeep
-Milk_v2/
+styles/*
+!styles/all
