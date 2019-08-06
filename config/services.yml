@@ -6,4 +6,6 @@ services:
             - '@controller.helper'
             - '@template'
             - '@user'
+            - '@auth'
             - '@request'
+            - '@db'

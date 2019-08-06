@@ -94,7 +94,7 @@ class functions
 		if( !( list($source_largeur, $source_hauteur) = @getimagesize($source) ) ) {
 		return false;
 		}
-		
+
 		// Calcul de la valeur dynamique en fonction des dimensions actuelles
 		// de l'image et de la dimension fixe que nous avons précisée en argument.
 		if( $type_value == "H" ) {
@@ -104,20 +104,25 @@ class functions
 		$nouv_largeur = $new_value;
 		$nouv_hauteur = ($new_value / $source_largeur) * $source_hauteur;
 		}
-		
+
 		// Création du conteneur.
 		$image = imagecreatetruecolor($nouv_largeur, $nouv_hauteur);
-		
+
 		// Importation de l'image source.
 		$source_image = imagecreatefromstring(file_get_contents($source));
-		
+
 		// Copie de l'image dans le nouveau conteneur en la rééchantillonant.
 		imagecopyresampled($image, $source_image, 0, 0, 0, 0, $nouv_largeur, $nouv_hauteur, $source_largeur, $source_hauteur);
-		
+
 		// Libération de la mémoire allouée aux deux images (sources et nouvelle).
 		imagedestroy($source_image);
-	
+
 		return $image;
+	}
+
+	public function coverHTML($urlRelease, $pathCover)
+	{
+		return "<a href='$urlRelease'><img src='/$pathCover'></a>";
 	}
 }
 
