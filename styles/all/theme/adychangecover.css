@@ -1,7 +1,12 @@
 .adychangecover {
-    min-height: 100%;
+    width: 100%;
 }
 
 .adychangecover form {
+    width: 200px;
     margin: 0 auto;
+}
+
+.adychangecover form input {
+    margin: 5px;
 }

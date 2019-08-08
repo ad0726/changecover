@@ -9,10 +9,6 @@
 
 namespace ady\changecover\core;
 
-use phpbb\auth\auth;
-use phpbb\user;
-use phpbb\db\driver\driver_interface as db_interface;
-
 class functions
 {
 	/** @var user */
@@ -24,6 +20,9 @@ class functions
 	/** @var db_interface */
 	protected $db;
 
+	/** @var string table_prefix */
+	protected $table_prefix;
+
 	/**
 	 * Constructor
 	 *
@@ -32,14 +31,25 @@ class functions
 	 * @param db_interface			$db
 	 */
 	public function __construct(
-		user $user,
-		auth $auth,
-		db_interface $db
+		\phpbb\user 						$user,
+		\phpbb\auth\auth 					$auth,
+		\phpbb\db\driver\driver_interface 	$db,
+											$table_prefix
     )
 	{
-		$this->user					= $user;
-		$this->auth					= $auth;
-		$this->db					= $db;
+		$this->user         = $user;
+		$this->auth         = $auth;
+		$this->db           = $db;
+		$this->table_prefix = $table_prefix;
+	}
+
+	public function fetchCoverToApprove() {
+		$sql    = "SELECT * FROM ".$this->table_prefix."changecover_toapprove";
+		$result = $this->db->sql_query($sql);
+		$rows   = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
+		d($rows);
 	}
 
 	/**

@@ -2,6 +2,7 @@ services:
     ady.changecover.controller:
         class: ady\changecover\controller\main
         arguments:
+            - '@ady.changecover.functions'
             - '@config'
             - '@controller.helper'
             - '@template'
@@ -9,4 +10,11 @@ services:
             - '@auth'
             - '@dbal.conn'
             - '@request'
+            - '%core.table_prefix%'
+    ady.changecover.functions:
+        class: ady\changecover\core\functions
+        arguments:
+            - '@user'
+            - '@auth'
+            - '@dbal.conn'
             - '%core.table_prefix%'

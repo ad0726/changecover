@@ -1,13 +1,14 @@
 <?php
 
-use \Symfony\Component\HttpFoundation\Response;
-use \ady\changecover\core;
-
 namespace ady\changecover\controller;
 
+use \Symfony\Component\HttpFoundation\Response;
 
 class main
 {
+    /* @var \ady\changecover\core\functions */
+    protected $ady_functions;
+
     /* @var \phpbb\config\config */
     protected $config;
 
@@ -35,6 +36,7 @@ class main
     /**
      * Constructor
      *
+     * @param \ady\changecover\core\functions   $ady_functions
      * @param \phpbb\config\config              $config
      * @param \phpbb\controller\helper          $helper
      * @param \phpbb\template\template          $template
@@ -46,23 +48,25 @@ class main
      *
      */
     public function __construct(
-        \phpbb\config\config $config,
-        \phpbb\controller\helper $helper,
-        \phpbb\template\template $template,
-        \phpbb\user $user,
-        \phpbb\auth\auth $auth,
-        \phpbb\db\driver\driver_interface $db,
-        \phpbb\request\request_interface $request,
-        $table_prefix)
+        \ady\changecover\core\functions     $ady_functions,
+        \phpbb\config\config                $config,
+        \phpbb\controller\helper            $helper,
+        \phpbb\template\template            $template,
+        \phpbb\user                         $user,
+        \phpbb\auth\auth                    $auth,
+        \phpbb\db\driver\driver_interface   $db,
+        \phpbb\request\request_interface    $request,
+                                            $table_prefix)
     {
-        $this->config       = $config;
-        $this->helper       = $helper;
-        $this->template     = $template;
-        $this->user         = $user;
-        $this->auth         = $auth;
-        $this->db           = $db;
-        $this->request      = $request;
-        $this->table_prefix = $table_prefix;
+        $this->ady_functions = $ady_functions;
+        $this->config        = $config;
+        $this->helper        = $helper;
+        $this->template      = $template;
+        $this->user          = $user;
+        $this->auth          = $auth;
+        $this->db            = $db;
+        $this->request       = $request;
+        $this->table_prefix  = $table_prefix;
     }
 
     /**
@@ -77,10 +81,11 @@ class main
         $submit = $this->request->is_set_post('post');
 
         if (!$submit) {
-            if ($path === 'requestcover') {
-                return $this->helper->render('requestcover.html');
-            } elseif ($path === 'validecover') {
-                return $this->helper->render('validecover.html');
+            if ($path === 'request') {
+                return $this->helper->render('request.html');
+            } elseif ($path === 'approve') {
+                $data = $this->ady_functions->fetchCoverToApprove();
+                return $this->helper->render('approve.html');
             } else {
                 throw new \phpbb\exception\http_exception(403, 'NO_AUTH_SPEAKING', array($path));
             }
@@ -89,7 +94,7 @@ class main
             $section    = $this->request->variable('section', '', true);
             $file       = $this->request->file('cover');
 
-            $upload = \ady\changecover\core\functions::uploadCover($file);
+            $upload = $this->ady_functions->uploadCover($file);
             if ($upload[0]) {
                 $pathCover = $upload[1];
 
@@ -100,7 +105,7 @@ class main
                     "user_id"     => $this->user->data['user_id']
                 ];
 
-                $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_tobeapproved ' . $this->db->sql_build_array('INSERT', $dataToDB);
+                $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_toapprove ' . $this->db->sql_build_array('INSERT', $dataToDB);
 
                 if (!$this->db->sql_query($sql)) {
                     return $this->helper->render('error.html');

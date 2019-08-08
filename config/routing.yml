@@ -1,9 +1,3 @@
-ady_changecover_page_custom_controller:
-    path: /changecover/validatecomics
-    defaults: { _controller: ady.changecover.core:validatecomics }
-ady_changecover_page_custom_controller:
-    path: /changecover/requestcover
-    defaults: { _controller: ady.changecover.core:requestcover }
 ady_changecover_route:
     path: /changecover/{path}
-    defaults: { _controller: ady.changecover.controller:handle, path: "requestcover" }
+    defaults: { _controller: ady.changecover.controller:handle, path: "request" }

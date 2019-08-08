@@ -21,7 +21,7 @@ class changecover_0_0_2 extends \phpbb\db\migration\migration
 	{
 		return [
 			'add_tables'	=> [
-				$this->table_prefix . 'changecover_tobeapproved' => [
+				$this->table_prefix . 'changecover_toapprove' => [
 					'COLUMNS'		=> [
 						'id'          => ['UINT'	 , null, 'auto_increment'],
 						'section'     => ['VCHAR:15' , ''],
@@ -39,7 +39,7 @@ class changecover_0_0_2 extends \phpbb\db\migration\migration
 	{
 		return [
 			'drop_tables'	=> [
-				$this->table_prefix . 'changecover_tobeapproved',
+				$this->table_prefix . 'changecover_toapprove',
 			],
 		];
 	}
