@@ -43,13 +43,37 @@ class functions
 		$this->table_prefix = $table_prefix;
 	}
 
-	public function fetchCoverToApprove() {
+	public function coverHTML($urlRelease, $pathCover)
+	{
+		return "<a href='$urlRelease'><img src='/$pathCover'></a>";
+	}
+
+	public function fetchCoverToApprove()
+	{
 		$sql    = "SELECT * FROM ".$this->table_prefix."changecover_toapprove";
 		$result = $this->db->sql_query($sql);
 		$rows   = $this->db->sql_fetchrowset($result);
 		$this->db->sql_freeresult($result);
 
-		d($rows);
+		$request = [];
+		foreach ($rows as $row) {
+			$request[$row['section']][] = [
+				'COVER' => self::coverHTML($row['url_release'], $row['path_cover']),
+				'USER'  => self::fetchUser($row['user_id'])
+			];
+		}
+
+		return $request;
+	}
+
+	public function fetchUser($user_id)
+	{
+		$sql    = "SELECT username FROM ".$this->table_prefix."users WHERE user_id = '$user_id'";
+		$result = $this->db->sql_query($sql);
+		$row    = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
+		return $row[0]['username'];
 	}
 
 	/**
@@ -128,11 +152,6 @@ class functions
 		imagedestroy($source_image);
 
 		return $image;
-	}
-
-	public function coverHTML($urlRelease, $pathCover)
-	{
-		return "<a href='$urlRelease'><img src='/$pathCover'></a>";
 	}
 }
 

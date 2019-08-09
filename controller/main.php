@@ -84,7 +84,13 @@ class main
             if ($path === 'request') {
                 return $this->helper->render('request.html');
             } elseif ($path === 'approve') {
-                $data = $this->ady_functions->fetchCoverToApprove();
+                $request = $this->ady_functions->fetchCoverToApprove();
+
+                // Output the page
+                $this->template->assign_vars([
+                    "ALL_REQUEST" => $request
+                ]);
+
                 return $this->helper->render('approve.html');
             } else {
                 throw new \phpbb\exception\http_exception(403, 'NO_AUTH_SPEAKING', array($path));

@@ -1,4 +1,12 @@
 <!-- INCLUDE overall_header.html -->
 {% INCLUDECSS '@ady_changecover/adychangecover.css' %}
 
+{% for SECTION, REQUEST_BY_SECTION in ALL_REQUEST %}
+<h2>{{ SECTION }}</h2>
+{% for REQUEST in REQUEST_BY_SECTION %}
+{{ REQUEST.USER }}<br>
+{{ REQUEST.COVER }}
+{% endfor %}
+{% endfor %}
+
 <!-- INCLUDE overall_footer.html -->
