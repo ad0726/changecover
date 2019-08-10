@@ -19,8 +19,9 @@ services:
             - '@dbal.conn'
             - '@template'
             - '%core.table_prefix%'
-    ady.changecover.acp.listener:
+    ady.changecover.listener:
         class: ady\changecover\event\listener
         arguments:
+            - '@ady.changecover.controller'
         tags:
             - { name: event.listener }

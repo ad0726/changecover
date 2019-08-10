@@ -74,6 +74,19 @@ class functions
 		return $request;
 	}
 
+	public function countCoverToApprove()
+	{
+		$table  = $this->table_prefix."changecover_toapprove";
+		$sql    = "SELECT COUNT(id) FROM $table";
+		$result = $this->db->sql_query($sql);
+		$row    = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
+		$count  = $row[0]['COUNT(id)'] ?? 0;
+
+		return $count;
+	}
+
 	public function fetchUser($user_id)
 	{
 		$sql    = "SELECT username FROM ".$this->table_prefix."users WHERE user_id = '$user_id'";
@@ -254,8 +267,4 @@ class functions
 
 		return $image;
 	}
-}
-
-function d($data) {
-	die(print_r($data, 1));
 }

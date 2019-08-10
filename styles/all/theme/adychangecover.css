@@ -44,3 +44,31 @@
 .adychangecover.approve table td {
     width: 160px;
 }
+
+.changecover-nav-link {
+    margin-left: 2px;
+}
+
+.changecover-nav-caret {
+    margin-left: 5px;
+}
+
+.changecover-notifications {
+    display      : inline-block;
+    width        : 20px;
+    height       : 25px;
+    border-radius: 25%;
+    text-align   : center;
+    background   : #ff00009c;
+    color        : white;
+    font-weight  : bold;
+}
+
+.changecover-notifications span {
+    display    : block;
+}
+
+.changecover-notifications.notifications-on-list {
+    height     : 16px;
+    margin-left: 2px;
+}

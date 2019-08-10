@@ -164,10 +164,27 @@ class main
                 }
             }
         }
-
     }
-}
 
-function d($data) {
-	die(print_r($data, 1));
+    /**
+	 * Adds the template variables for the header link
+	 */
+	public function render_page_header_link()
+	{
+        $approver  = $this->auth->acl_get('u_changecover_approver');
+        $requester = $this->auth->acl_get('u_changecover_requester');
+		if (!$approver && !$requester) {
+			return;
+        }
+
+        $countCoverToApprove = $this->ady_functions->countCoverToApprove();
+
+		$template_data = [
+			'U_CHANGECOVER_APPROVER'  => $approver,
+			'U_CHANGECOVER_REQUESTER' => $requester,
+			'NOTIFICATIONS'           => $countCoverToApprove
+		];
+
+        $this->template->assign_vars($template_data);
+	}
 }

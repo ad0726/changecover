@@ -27,13 +27,19 @@ class listener implements EventSubscriberInterface
 	{
 		return [
 			'core.permissions' => 'permissions',
+			'core.page_header' => 'add_page_header_link',
 		];
 	}
 
 	/**
 	* Constructor
 	*/
-	public function __construct() {}
+	public function __construct(
+		\ady\changecover\controller\main $ady_controller
+		)
+		{
+			$this->ady_controller = $ady_controller;
+		}
 
 	/**
 	 * @param data $event
@@ -61,5 +67,13 @@ class listener implements EventSubscriberInterface
 		}
 
 		$event['permissions'] = array_merge($event['permissions'], $changecover_permissions);
+	}
+
+	/**
+	 * Create a URL to the mchat controller file for the header linklist
+	 */
+	public function add_page_header_link()
+	{
+		$this->ady_controller->render_page_header_link();
 	}
 }
