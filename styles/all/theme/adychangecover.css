@@ -3,10 +3,35 @@
 }
 
 .adychangecover form {
-    width: 200px;
+    width : 200px;
     margin: 0 auto;
 }
 
 .adychangecover form input {
     margin: 5px;
+}
+
+.adychangecover.approve {
+    width     : 100%;
+    text-align: center;
+}
+
+.adychangecover.approve .section {
+    width          : 100%;
+    text-align     : center;
+    display        : flex;
+    flex-wrap      : wrap;
+    justify-content: center;
+    align-items    : center;
+    margin-bottom  : 10px;
+}
+
+.adychangecover.approve .section h2 {
+    width         : 100%;
+    text-transform: capitalize;
+}
+
+.adychangecover.approve .section .one-request {
+    width     : 150px;
+    text-align: center;
 }

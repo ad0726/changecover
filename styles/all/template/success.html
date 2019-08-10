@@ -1,8 +1,12 @@
 <!-- INCLUDE overall_header.html -->
 {% INCLUDECSS '@ady_changecover/adychangecover.css' %}
 
-<div class="adychangecover message_request_success">
+<div class="adychangecover message_success">
+    {% if SUCCESS == "sended" %}
     <p>Votre requête a bien été envoyé. Un administrateur doit encore la valider.</p>
+    {% elseif SUCCESS == "approved" %}
+    <p>Header à jour.</p>
+    {% endif %}
 </div>
 
 {% INCLUDEJS '@ady_changecover/javascript/script.js' %}

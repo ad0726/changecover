@@ -96,30 +96,56 @@ class main
                 throw new \phpbb\exception\http_exception(403, 'NO_AUTH_SPEAKING', array($path));
             }
         } else {
-            $urlRelease = $this->request->variable('url'    , '', true);
-            $section    = $this->request->variable('section', '', true);
-            $file       = $this->request->file('cover');
+            if ($path === 'request') {
+                $urlRelease = $this->request->variable('url'    , '', true);
+                $section    = $this->request->variable('section', '', true);
+                $file       = $this->request->file('cover');
 
-            $upload = $this->ady_functions->uploadCover($file);
-            if ($upload[0]) {
-                $pathCover = $upload[1];
+                $upload     = $this->ady_functions->uploadCover($file);
+                if ($upload[0]) {
+                    $pathCover = $upload[1];
+                    $dataToDB  = [
+                        "section"     => $section,
+                        "url_release" => $urlRelease,
+                        "path_cover"  => $pathCover,
+                        "user_id"     => $this->user->data['user_id']
+                    ];
 
-                $dataToDB = [
-                    "section"     => $section,
-                    "url_release" => $urlRelease,
-                    "path_cover"  => $pathCover,
-                    "user_id"     => $this->user->data['user_id']
-                ];
+                    $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_toapprove ' . $this->db->sql_build_array('INSERT', $dataToDB);
 
-                $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_toapprove ' . $this->db->sql_build_array('INSERT', $dataToDB);
+                    if (!$this->db->sql_query($sql)) {
+                        return $this->helper->render('error.html');
+                    } else {
+                        // Output the page
+                        $this->template->assign_vars([
+                            "SUCCESS" => "sended"
+                        ]);
+                        return $this->helper->render('success.html');
+                    }
+                } else {
+                    return $this->helper->render('error.html');
+                }
+            } elseif ($path === 'approve') {
+                $approved = $this->request->variable('approved', [''=>''], true);
 
-                if (!$this->db->sql_query($sql)) {
+                $covers = $this->ady_functions->fetchAndParseForTabNews($approved);
+                $update = $this->ady_functions->updateTabNews($covers);
+
+                if (!$update) {
                     return $this->helper->render('error.html');
                 } else {
-                    return $this->helper->render('request_success.html');
+                    $delete = $this->ady_functions->deleteRequest($approved);
+
+                    if (!$delete) {
+                        return $this->helper->render('error.html');
+                    } else {
+                        // Output the page
+                        $this->template->assign_vars([
+                            "SUCCESS" => "approved"
+                        ]);
+                        return $this->helper->render('success.html');
+                    }
                 }
-            } else {
-                return $this->helper->render('error.html');
             }
         }
 

@@ -17,4 +17,5 @@ services:
             - '@user'
             - '@auth'
             - '@dbal.conn'
+            - '@template'
             - '%core.table_prefix%'

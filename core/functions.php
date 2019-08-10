@@ -20,6 +20,9 @@ class functions
 	/** @var db_interface */
 	protected $db;
 
+	/* @var \phpbb\template\template */
+	protected $template;
+
 	/** @var string table_prefix */
 	protected $table_prefix;
 
@@ -29,11 +32,14 @@ class functions
 	 * @param user					$user
 	 * @param auth					$auth
 	 * @param db_interface			$db
+     * @param template          	$template
+	 * @param string                $table_prefix
 	 */
 	public function __construct(
 		\phpbb\user 						$user,
 		\phpbb\auth\auth 					$auth,
 		\phpbb\db\driver\driver_interface 	$db,
+        \phpbb\template\template            $template,
 											$table_prefix
     )
 	{
@@ -50,7 +56,8 @@ class functions
 
 	public function fetchCoverToApprove()
 	{
-		$sql    = "SELECT * FROM ".$this->table_prefix."changecover_toapprove";
+		$table  = $this->table_prefix."changecover_toapprove";
+		$sql    = "SELECT * FROM $table";
 		$result = $this->db->sql_query($sql);
 		$rows   = $this->db->sql_fetchrowset($result);
 		$this->db->sql_freeresult($result);
@@ -58,6 +65,7 @@ class functions
 		$request = [];
 		foreach ($rows as $row) {
 			$request[$row['section']][] = [
+				'ID'    => $row['id'],
 				'COVER' => self::coverHTML($row['url_release'], $row['path_cover']),
 				'USER'  => self::fetchUser($row['user_id'])
 			];
@@ -74,6 +82,99 @@ class functions
 		$this->db->sql_freeresult($result);
 
 		return $row[0]['username'];
+	}
+
+	public function fetchAndParseForTabNews($approved)
+	{
+		$covers = [];
+
+		foreach ($approved as $id=>$value) {
+			$cover = self::fetchCoverApproved($id);
+			$html  = self::coverHTML($cover['url_release'], $cover['path_cover']);
+			$covers[$cover['section']][] = $html;
+		}
+
+		return $covers;
+	}
+
+	public function fetchCoverApproved($id)
+	{
+		$table  = $this->table_prefix."changecover_toapprove";
+		$sql    = "SELECT section, url_release, path_cover FROM $table WHERE id = '$id'";
+		$result = $this->db->sql_query($sql);
+		$row    = $this->db->sql_fetchrowset($result);
+		$this->db->sql_freeresult($result);
+
+		if (!empty($row)) {
+			$cover = $row[0];
+		}
+
+		return $cover;
+	}
+
+	public function updateTabNews($covers)
+	{
+		$tabnews_order = [
+			"dcrebirth"     => "tabnews2_urlpage",
+			"dchorsrebirth" => "tabnews_text",
+			"inde"          => "tabnews4_urlpage",
+			"marvel"        => "tabnews5_urlpage"
+		];
+
+		$table = $this->table_prefix."config_text";
+		$begin = "<!-- BEGIN COVER -->\n";
+		$end   = "\n<!-- END COVER -->";
+		foreach ($covers as $section=>$cover) {
+			$tab_to_update = $tabnews_order[$section];
+			$sql           = "SELECT config_value FROM $table WHERE config_name = '$tab_to_update'";
+			$result        = $this->db->sql_query($sql);
+			$row           = $this->db->sql_fetchrow($result);
+			$tabnews       = html_entity_decode($row['config_value']);
+			$this->db->sql_freeresult($result);
+
+			$first_pattern = '/(?s)<\!-- BEGIN COVER -->\s(.*)\s<\!-- END COVER -->/';
+			preg_match($first_pattern, $tabnews, $first_search);
+
+			$second_pattern = "/(?:(<a (?:(?!<\/a>).)*<\/a>)+)/";
+			preg_match_all($second_pattern, $first_search[1], $tabnews_covers);
+
+			if (isset($tabnews_covers[0])  &&
+				!empty($tabnews_covers[0]) &&
+				(count($tabnews_covers[0]) == 9))
+			{
+				$tabnews_covers = $tabnews_covers[0];
+				$count_toremove = count($cover);
+				array_splice($tabnews_covers, -$count_toremove, $count_toremove);
+				$tabnews_covers = array_merge($cover, $tabnews_covers);
+				$tabnew_replace = $begin.implode("\n", $tabnews_covers).$end;
+				$replace        = preg_replace($first_pattern, $tabnew_replace, $tabnews);
+				$new_tabnews    = [
+					"config_value" => htmlentities($replace)
+				];
+			}
+
+			$sql = "UPDATE $table SET ".$this->db->sql_build_array('UPDATE', $new_tabnews);
+
+			if (!$this->db->sql_query($sql)) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	public function deleteRequest($ids) {
+		$table  = $this->table_prefix."changecover_toapprove";
+		foreach ($ids as $id=>$value) {
+			$condition = ["id" => $id];
+			$sql = "DELETE FROM $table WHERE ".$this->db->sql_build_array('DELETE', $condition);
+
+			if (!$this->db->sql_query($sql)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 
 	/**

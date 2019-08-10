@@ -1,12 +1,20 @@
 <!-- INCLUDE overall_header.html -->
-{% INCLUDECSS '@ady_changecover/adychangecover.css' %}
+{% INCLUDECSS '@ady_changecover/adychangecover.css?ver=1.0.0' %}
 
-{% for SECTION, REQUEST_BY_SECTION in ALL_REQUEST %}
-<h2>{{ SECTION }}</h2>
-{% for REQUEST in REQUEST_BY_SECTION %}
-{{ REQUEST.USER }}<br>
-{{ REQUEST.COVER }}
-{% endfor %}
-{% endfor %}
+<form class="adychangecover approve" method="POST" action="">
+    {% for SECTION, REQUEST_BY_SECTION in ALL_REQUEST %}
+    <div class="section">
+        <h2>{{ SECTION }}</h2>
+        {% for REQUEST in REQUEST_BY_SECTION %}
+        <div class="one-request">
+            {{ REQUEST.USER }}<br>
+            {{ REQUEST.COVER }}
+            <input type="checkbox" name="approved[{{ REQUEST.ID }}]">
+        </div>
+        {% endfor %}
+    </div>
+    {% endfor %}
+    <input type="submit" name="post" value="Submit">
+</form>
 
 <!-- INCLUDE overall_footer.html -->
