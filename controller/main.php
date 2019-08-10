@@ -82,8 +82,24 @@ class main
 
         if (!$submit) {
             if ($path === 'request') {
+                if (!$this->auth->acl_get('u_changecover_requester')) {
+                    if (!$this->user->data['is_registered']){
+                        login_box();
+                    }
+
+                    throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
+                }
+
                 return $this->helper->render('request.html');
             } elseif ($path === 'approve') {
+                if (!$this->auth->acl_get('u_changecover_approver')) {
+                    if (!$this->user->data['is_registered']){
+                        login_box();
+                    }
+
+                    throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
+                }
+
                 $request = $this->ady_functions->fetchCoverToApprove();
 
                 // Output the page
@@ -93,7 +109,7 @@ class main
 
                 return $this->helper->render('approve.html');
             } else {
-                throw new \phpbb\exception\http_exception(403, 'NO_AUTH_SPEAKING', array($path));
+                throw new \phpbb\exception\http_exception(404, 'PAGE_NOT_FOUND', array($path));
             }
         } else {
             if ($path === 'request') {

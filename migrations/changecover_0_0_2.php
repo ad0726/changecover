@@ -49,6 +49,8 @@ class changecover_0_0_2 extends \phpbb\db\migration\migration
 		return [
 			// Current version
 			['config.add', ['changecover_version', '0.0.2']],
+			['permission.add', ['u_changecover_requester', true]],
+			['permission.add', ['u_changecover_approver', true]]
 		];
 	}
 }

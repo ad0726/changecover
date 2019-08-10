@@ -9,6 +9,7 @@
 namespace ady\changecover\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use phpbb\event\data;
 
 /**
 * Event listener
@@ -24,22 +25,41 @@ class listener implements EventSubscriberInterface
 */
 	static public function getSubscribedEvents()
 	{
-		return array(
-		);
+		return [
+			'core.permissions' => 'permissions',
+		];
 	}
-
-	/** @var \phpbb\template\template */
-	protected $template;
-
-	//** @var string phpbb_root_path */
-	protected $phpbb_root_path;
 
 	/**
 	* Constructor
 	*/
-	public function __construct($phpbb_root_path, \phpbb\template\template $template)
+	public function __construct() {}
+
+	/**
+	 * @param data $event
+	 */
+	public function permissions(data $event)
 	{
-		$this->phpbb_root_path = $phpbb_root_path;
-		$this->template = $template;
+		$permission_categories = [
+			'misc' => [
+				'u_changecover_requester',
+				'u_changecover_approver',
+			]
+		];
+
+		$changecover_permissions = [];
+
+		foreach ($permission_categories as $cat => $permissions)
+		{
+			foreach ($permissions as $permission)
+			{
+				$changecover_permissions[$permission] = [
+					'lang'	=> 'ACL_' . strtoupper($permission),
+					'cat'	=> $cat,
+				];
+			}
+		}
+
+		$event['permissions'] = array_merge($event['permissions'], $changecover_permissions);
 	}
 }
