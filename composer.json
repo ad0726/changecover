@@ -2,8 +2,8 @@
     "name": "ady/changecover",
     "type": "phpbb-extension",
     "description": "To change cover into Tab News",
-    "homepage": "https://github.com/ad0726",
-    "version": "0.0.2",
+    "homepage": "https://github.com/ad0726/changecover",
+    "version": "1.0.0",
     "time": "2019-08-04",
     "license": "GPL-2.0",
     "authors": [
