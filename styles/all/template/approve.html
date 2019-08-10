@@ -1,20 +1,53 @@
 <!-- INCLUDE overall_header.html -->
 {% INCLUDECSS '@ady_changecover/adychangecover.css?ver=1.0.0' %}
 
+{% set THEADS = {
+    'USER'    : 'Demandeur',
+    'COVER'   : 'Cover',
+    'CHECKBOX': 'Validation'
+}%}
+
+{% set DISPLAY_SECTION = {
+    'dcrebirth'    : 'DC Rebirth',
+    'dchorsrebirth': 'DC Hors Rebirth',
+    'inde'         : 'Indépendant',
+    'marvel'       : 'Marvel'
+}%}
+
+{% if ALL_REQUEST %}
 <form class="adychangecover approve" method="POST" action="">
     {% for SECTION, REQUEST_BY_SECTION in ALL_REQUEST %}
     <div class="section">
-        <h2>{{ SECTION }}</h2>
-        {% for REQUEST in REQUEST_BY_SECTION %}
-        <div class="one-request">
-            {{ REQUEST.USER }}<br>
-            {{ REQUEST.COVER }}
-            <input type="checkbox" name="approved[{{ REQUEST.ID }}]">
-        </div>
-        {% endfor %}
+        <h2>{{ DISPLAY_SECTION[SECTION] }}</h2>
+        <table>
+            {% for TYPE, THEAD in THEADS %}
+            <tr>
+                <td>
+                    {{ THEAD }}
+                </td>
+                {% for REQUEST in REQUEST_BY_SECTION %}
+                {% if TYPE == 'CHECKBOX' %}
+                <td>
+                    <input type="checkbox" name="approved[{{ REQUEST.ID }}]">
+                </td>
+                {% else %}
+                <td>
+                    {{ REQUEST[TYPE] }}
+                </td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
     </div>
     {% endfor %}
     <input type="submit" name="post" value="Submit">
 </form>
+{% else %}
+<div class="adychangecover">
+    <p>Aucune demande de header actuellement.</p>
+    <a href="/">Retour à l'accueil</a>
+</div>
+{% endif %}
 
 <!-- INCLUDE overall_footer.html -->

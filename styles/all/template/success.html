@@ -4,10 +4,12 @@
 <div class="adychangecover message_success">
     {% if SUCCESS == "sended" %}
     <p>Votre requête a bien été envoyé. Un administrateur doit encore la valider.</p>
+    <a href="/app.php/changecover/request">Faire une nouvelle demande</a>
+    |
     {% elseif SUCCESS == "approved" %}
     <p>Header à jour.</p>
     {% endif %}
+    <a href="/">Retour à l'accueil</a>
 </div>
 
-{% INCLUDEJS '@ady_changecover/javascript/script.js' %}
 <!-- INCLUDE overall_footer.html -->

@@ -153,7 +153,7 @@ class functions
 				];
 			}
 
-			$sql = "UPDATE $table SET ".$this->db->sql_build_array('UPDATE', $new_tabnews);
+			$sql = "UPDATE $table SET ".$this->db->sql_build_array('UPDATE', $new_tabnews)." WHERE config_name = '$tab_to_update'";
 
 			if (!$this->db->sql_query($sql)) {
 				return false;
