@@ -149,13 +149,12 @@ class main
                 $remove   = $this->request->variable('remove', [''=>''], true);
 
                 if (!empty($remove)) {
-                    $ids_toremove = array_keys($remove);
-                    $removed      = $this->ady_functions->deleteRequest($ids_toremove);
+                    $removed = $this->ady_functions->deleteRequest($remove);
 
                     if (!$removed) $error += 1;
                 }
 
-                if (!empty($approve)) {
+                if (!empty($approved)) {
                     $covers  = $this->ady_functions->fetchAndParseForTabNews($approved);
                     $updated = $this->ady_functions->updateTabNews($covers);
 
