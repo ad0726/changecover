@@ -138,29 +138,49 @@ class main
                         ]);
                         return $this->helper->render('success.html');
                     }
+
                 } else {
                     return $this->helper->render('error.html');
                 }
+
             } elseif ($path === 'approve') {
+                $error    = 0;
                 $approved = $this->request->variable('approved', [''=>''], true);
+                $remove   = $this->request->variable('remove', [''=>''], true);
 
-                $covers = $this->ady_functions->fetchAndParseForTabNews($approved);
-                $update = $this->ady_functions->updateTabNews($covers);
+                if (!empty($remove)) {
+                    $ids_toremove = array_keys($remove);
+                    $removed      = $this->ady_functions->deleteRequest($ids_toremove);
 
-                if (!$update) {
+                    if (!$removed) $error += 1;
+                }
+
+                if (!empty($approve)) {
+                    $covers  = $this->ady_functions->fetchAndParseForTabNews($approved);
+                    $updated = $this->ady_functions->updateTabNews($covers);
+
+                    if (!$updated) $error += 2;
+                }
+
+                if ($error >= 2) {
+                    // Output the page
+                    $this->template->assign_vars([
+                        "ERROR" => $error
+                    ]);
+
                     return $this->helper->render('error.html');
                 } else {
                     $delete = $this->ady_functions->deleteRequest($approved);
 
-                    if (!$delete) {
-                        return $this->helper->render('error.html');
-                    } else {
-                        // Output the page
-                        $this->template->assign_vars([
-                            "SUCCESS" => "approved"
-                        ]);
-                        return $this->helper->render('success.html');
-                    }
+                    if (!$delete) $error += 4;
+
+                    // Output the page
+                    $this->template->assign_vars([
+                        "SUCCESS" => "approved",
+                        "ERROR"   => $error
+                    ]);
+
+                    return $this->helper->render('success.html');
                 }
             }
         }

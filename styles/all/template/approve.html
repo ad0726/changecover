@@ -2,9 +2,10 @@
 {% INCLUDECSS '@ady_changecover/adychangecover.css' %}
 
 {% set THEADS = {
-    'USER'    : 'Demandeur',
-    'COVER'   : 'Cover',
-    'CHECKBOX': 'Validation'
+    'USER'   : 'Demandeur',
+    'COVER'  : 'Cover',
+    'APPROVE': 'Valider',
+    'REMOVE' : 'Supprimer'
 }%}
 
 {% set DISPLAY_SECTION = {
@@ -26,9 +27,13 @@
                     {{ THEAD }}
                 </td>
                 {% for REQUEST in REQUEST_BY_SECTION %}
-                {% if TYPE == 'CHECKBOX' %}
+                {% if TYPE == 'APPROVE' %}
                 <td>
                     <input type="checkbox" name="approved[{{ REQUEST.ID }}]">
+                </td>
+                {% elseif TYPE == 'REMOVE' %}
+                <td>
+                    <input type="checkbox" name="remove[{{ REQUEST.ID }}]">
                 </td>
                 {% else %}
                 <td>
