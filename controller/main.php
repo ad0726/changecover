@@ -90,7 +90,7 @@ class main
                     throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
                 }
 
-                return $this->helper->render('request.html');
+                return $this->helper->render('request.html', "Header Requester");
             } elseif ($path === 'approve') {
                 if (!$this->auth->acl_get('u_changecover_approver')) {
                     if (!$this->user->data['is_registered']) {
@@ -107,7 +107,7 @@ class main
                     "ALL_REQUEST" => $request
                 ]);
 
-                return $this->helper->render('approve.html');
+                return $this->helper->render('approve.html', "Header Approver");
             } elseif ($path === 'home') {
                 if (!$this->auth->acl_get('u_changecover_approver') &&
                     !$this->auth->acl_get('u_changecover_requester')) {
@@ -124,7 +124,7 @@ class main
                         "U_CHANGECOVER_APPROVER" => true
                     ]);
                 }
-                return $this->helper->render('home.html');
+                return $this->helper->render('home.html', "Header Home");
             } else {
                 throw new \phpbb\exception\http_exception(404, 'PAGE_NOT_FOUND', [$path]);
             }
@@ -147,17 +147,17 @@ class main
                     $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_toapprove ' . $this->db->sql_build_array('INSERT', $dataToDB);
 
                     if (!$this->db->sql_query($sql)) {
-                        return $this->helper->render('error.html');
+                        return $this->helper->render('error.html', "Header Error");
                     } else {
                         // Output the page
                         $this->template->assign_vars([
                             "SUCCESS" => "sended"
                         ]);
-                        return $this->helper->render('success.html');
+                        return $this->helper->render('success.html', "Header Success");
                     }
 
                 } else {
-                    return $this->helper->render('error.html');
+                    return $this->helper->render('error.html', "Header Error");
                 }
 
             } elseif ($path === 'approve') {
@@ -205,7 +205,7 @@ class main
                         "ERROR" => $error
                     ]);
 
-                    return $this->helper->render('error.html');
+                    return $this->helper->render('error.html', "Header Error");
                 } else {
                     $delete = $this->ady_functions->deleteRequest($submit["approve"]);
 
@@ -217,7 +217,7 @@ class main
                         "ERROR"   => $error
                     ]);
 
-                    return $this->helper->render('success.html');
+                    return $this->helper->render('success.html', "Header Success");
                 }
             }
         }
