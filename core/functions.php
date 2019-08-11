@@ -160,41 +160,59 @@ class functions
 				!empty($tabnews_covers[0]) &&
 				(count($tabnews_covers[0]) == 9))
 			{
-				$tabnews_covers = $tabnews_covers[0];
-				$count_toremove = count($cover);
+				$tabnews_covers  = $tabnews_covers[0];
+				$covers_toremove = $tabnews_covers;
+				$count_toremove  = count($cover);
+				array_splice($covers_toremove, 0, 9-$count_toremove);
 				array_splice($tabnews_covers, -$count_toremove, $count_toremove);
-				$tabnews_covers = array_merge($cover, $tabnews_covers);
-				$tabnew_replace = $begin.implode("\n", $tabnews_covers).$end;
-				$replace        = preg_replace($first_pattern, $tabnew_replace, $tabnews);
-				$new_tabnews    = [
+				$tabnews_covers  = array_merge($cover, $tabnews_covers);
+				$tabnew_replace  = $begin.implode("\n", $tabnews_covers).$end;
+				$replace         = preg_replace($first_pattern, $tabnew_replace, $tabnews);
+				$new_tabnews     = [
 					"config_value" => htmlentities($replace)
 				];
+
+				$sql = "UPDATE $table SET ".$this->db->sql_build_array('UPDATE', $new_tabnews)." WHERE config_name = '$tab_to_update'";
+
+				if (!$this->db->sql_query($sql)) {
+					return false;
+				}
+
+				self::removeFiles($covers_toremove, true);
 			}
 
-			$sql = "UPDATE $table SET ".$this->db->sql_build_array('UPDATE', $new_tabnews)." WHERE config_name = '$tab_to_update'";
-
-			if (!$this->db->sql_query($sql)) {
-				return false;
-			}
 		}
 
 		return true;
 	}
 
+	public function removeFiles($files, $in_html=false) {
+		if (!$in_html) {
+			foreach ($files as $file) {
+				@unlink($this->root_path.$file);
+			}
+		} else {
+			foreach ($files as $cover_toremove) {
+				$third_pattern = "/<img src=\"(.+)\">/";
+				preg_match($third_pattern, $cover_toremove, $result);
+
+				if (isset($file[1]) && !empty($file[1])) {
+					@unlink($this->root_path.$file[1]);
+				}
+			}
+		}
+	}
+
 	public function deleteRequest($ids) {
 		$table  = $this->table_prefix."changecover_toapprove";
 		foreach ($ids as $i=>$id) {
-			$cover     = self::fetchCoverApproved($id);
-			$file      = $this->root_path.$cover['path_cover'];
 			$condition = ["id" => $id];
-
 			$sql       = "DELETE FROM $table WHERE ".$this->db->sql_build_array('DELETE', $condition);
 
 			if (!$this->db->sql_query($sql)) {
 				return false;
 			}
 
-			unlink($file);
 		}
 
 		return true;
@@ -278,3 +296,8 @@ class functions
 		return $image;
 	}
 }
+
+// Function debug for dev
+// function d($data) {
+// 	die(print_r($data, 1));
+// }

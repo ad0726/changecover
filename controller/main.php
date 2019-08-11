@@ -177,9 +177,19 @@ class main
                 }
 
                 if (!empty($submit["remove"])) {
+                    $files = [];
+                    foreach ($submit["remove"] as $id) {
+                        $cover   = $this->ady_functions->fetchCoverApproved($id);
+                        $files[] = $cover['path_cover'];
+                    }
+
                     $removed = $this->ady_functions->deleteRequest($submit["remove"]);
 
-                    if (!$removed) $error += 1;
+                    if (!$removed) {
+                        $error += 1;
+                    } else {
+                        $this->ady_functions->removeFiles($files);
+                    }
                 }
 
                 if (!empty($submit["approve"])) {
@@ -235,3 +245,8 @@ class main
         $this->template->assign_vars($template_data);
 	}
 }
+
+// Function debug for dev
+// function d($data) {
+// 	die(print_r($data, 1));
+// }
