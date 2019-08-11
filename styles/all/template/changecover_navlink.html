@@ -41,7 +41,12 @@
         </div>
     </div>
     <div class="changecover-nav-container mobile">
-        <a href="/app.php/changecover/home" title="changecover" class="changecover-nav-link-title" role="menuitem">
+        {% if U_CHANGECOVER_APPROVER %}
+            {% set URL_NAV = "home" %}
+        {% else %}
+            {% set URL_NAV = "request" %}
+        {% endif %}
+        <a href="/app.php/changecover/{{ URL_NAV }}" title="changecover" class="changecover-nav-link-title" role="menuitem">
             <i class="fa fa-window-maximize"></i>
             <span class="changecover-nav-link">Header</span>
         </a>

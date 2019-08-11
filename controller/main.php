@@ -93,7 +93,7 @@ class main
                 return $this->helper->render('request.html');
             } elseif ($path === 'approve') {
                 if (!$this->auth->acl_get('u_changecover_approver')) {
-                    if (!$this->user->data['is_registered']){
+                    if (!$this->user->data['is_registered']) {
                         login_box();
                     }
 
@@ -109,9 +109,24 @@ class main
 
                 return $this->helper->render('approve.html');
             } elseif ($path === 'home') {
+                if (!$this->auth->acl_get('u_changecover_approver') &&
+                    !$this->auth->acl_get('u_changecover_requester')) {
+                    if (!$this->user->data['is_registered']) {
+                        login_box();
+                    }
+
+                    throw new \phpbb\exception\http_exception(403, 'NOT_AUTHORISED');
+                }
+
+                if ($this->auth->acl_get('u_changecover_approver')) {
+                    // Output the page
+                    $this->template->assign_vars([
+                        "U_CHANGECOVER_APPROVER" => true
+                    ]);
+                }
                 return $this->helper->render('home.html');
             } else {
-                throw new \phpbb\exception\http_exception(404, 'PAGE_NOT_FOUND', array($path));
+                throw new \phpbb\exception\http_exception(404, 'PAGE_NOT_FOUND', [$path]);
             }
         } else {
             if ($path === 'request') {
