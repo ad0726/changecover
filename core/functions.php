@@ -26,6 +26,9 @@ class functions
 	/** @var string table_prefix */
 	protected $table_prefix;
 
+	/** @var string root_path */
+	protected $root_path;
+
 	/**
 	 * Constructor
 	 *
@@ -40,13 +43,15 @@ class functions
 		\phpbb\auth\auth 					$auth,
 		\phpbb\db\driver\driver_interface 	$db,
         \phpbb\template\template            $template,
-											$table_prefix
+											$table_prefix,
+											$root_path
     )
 	{
 		$this->user         = $user;
 		$this->auth         = $auth;
 		$this->db           = $db;
 		$this->table_prefix = $table_prefix;
+		$this->root_path    = $root_path;
 	}
 
 	public function coverHTML($urlRelease, $pathCover)
@@ -97,11 +102,11 @@ class functions
 		return $row[0]['username'];
 	}
 
-	public function fetchAndParseForTabNews($approved)
+	public function fetchAndParseForTabNews($ids)
 	{
 		$covers = [];
 
-		foreach ($approved as $id=>$value) {
+		foreach ($ids as $i=>$id) {
 			$cover = self::fetchCoverApproved($id);
 			$html  = self::coverHTML($cover['url_release'], $cover['path_cover']);
 			$covers[$cover['section']][] = $html;
@@ -178,13 +183,18 @@ class functions
 
 	public function deleteRequest($ids) {
 		$table  = $this->table_prefix."changecover_toapprove";
-		foreach ($ids as $id=>$value) {
+		foreach ($ids as $i=>$id) {
+			$cover     = self::fetchCoverApproved($id);
+			$file      = $this->root_path.$cover['path_cover'];
 			$condition = ["id" => $id];
-			$sql = "DELETE FROM $table WHERE ".$this->db->sql_build_array('DELETE', $condition);
+
+			$sql       = "DELETE FROM $table WHERE ".$this->db->sql_build_array('DELETE', $condition);
 
 			if (!$this->db->sql_query($sql)) {
 				return false;
 			}
+
+			unlink($file);
 		}
 
 		return true;

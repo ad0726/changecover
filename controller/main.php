@@ -108,6 +108,8 @@ class main
                 ]);
 
                 return $this->helper->render('approve.html');
+            } elseif ($path === 'home') {
+                return $this->helper->render('home.html');
             } else {
                 throw new \phpbb\exception\http_exception(404, 'PAGE_NOT_FOUND', array($path));
             }
@@ -144,18 +146,29 @@ class main
                 }
 
             } elseif ($path === 'approve') {
-                $error    = 0;
-                $approved = $this->request->variable('approved', [''=>''], true);
-                $remove   = $this->request->variable('remove', [''=>''], true);
+                $error  = 0;
+                $radio  = $this->request->variable('radio', [''=>''], true);
+                $submit = [
+                    "approve" => [],
+                    "remove"  => []
+                ];
 
-                if (!empty($remove)) {
-                    $removed = $this->ady_functions->deleteRequest($remove);
+                foreach ($radio as $id=>$action) {
+                    if ($action == "approve") {
+                        $submit["approve"][] = $id;
+                    } else if ($action == "remove") {
+                        $submit["remove"][] = $id;
+                    }
+                }
+
+                if (!empty($submit["remove"])) {
+                    $removed = $this->ady_functions->deleteRequest($submit["remove"]);
 
                     if (!$removed) $error += 1;
                 }
 
-                if (!empty($approved)) {
-                    $covers  = $this->ady_functions->fetchAndParseForTabNews($approved);
+                if (!empty($submit["approve"])) {
+                    $covers  = $this->ady_functions->fetchAndParseForTabNews($submit["approve"]);
                     $updated = $this->ady_functions->updateTabNews($covers);
 
                     if (!$updated) $error += 2;
@@ -169,7 +182,7 @@ class main
 
                     return $this->helper->render('error.html');
                 } else {
-                    $delete = $this->ady_functions->deleteRequest($approved);
+                    $delete = $this->ady_functions->deleteRequest($submit["approve"]);
 
                     if (!$delete) $error += 4;
 
