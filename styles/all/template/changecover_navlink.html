@@ -1,7 +1,7 @@
 {% INCLUDECSS '@ady_changecover/adychangecover.css' %}
 
 <li>
-    <div class="changecover-nav-container dropdown-container">
+    <div class="changecover-nav-container desktop dropdown-container">
         <a href="#" title="changecover" class="changecover-nav-link-title dropdown-trigger" role="menuitem">
             <i class="fa fa-window-maximize"></i>
             <span class="changecover-nav-link">Header</span>
@@ -40,4 +40,24 @@
             </ul>
         </div>
     </div>
+    <div class="changecover-nav-container mobile">
+        <a href="/app.php/changecover/home" title="changecover" class="changecover-nav-link-title" role="menuitem">
+            <i class="fa fa-window-maximize"></i>
+            <span class="changecover-nav-link">Header</span>
+        </a>
+        {% if NOTIFICATIONS != 0 %}
+        <a href="/app.php/changecover/approve">
+            <div class="changecover-notifications">
+                <span>{{ NOTIFICATIONS }}</span>
+            </div>
+        </a>
+        {% endif %}
+    </div>
 </li>
+{% if NOTIFICATIONS != 0 %}
+<li class="changecover-notifications-mobile" data-skip-responsive="true" data-select-match="changecover">
+    <div class="changecover-notifications">
+        <span>{{ NOTIFICATIONS }}</span>
+    </div>
+</li>
+{% endif %}

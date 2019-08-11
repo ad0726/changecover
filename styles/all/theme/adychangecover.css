@@ -3,17 +3,38 @@
     text-align: center;
 }
 
+.adychangecover.message-info {
+    background   : #d7f0f9;
+    color        : darkgreen;
+    border-radius: 2px;
+    padding      : 2px;
+}
+
 .adychangecover form {
-    width : 200px;
-    margin: 0 auto;
+    width         : 200px;
+    margin        : 0 auto;
+    display       : flex;
+    flex-direction: column;
 }
 
 .adychangecover form input {
     margin: 5px;
 }
 
+.adychangecover input[type="submit"] {
+    background   : none;
+    border       : 2px solid #d7f0f9;
+    border-radius: 2px;
+    box-shadow   : none;
+    padding      : 5px;
+}
+
 .adychangecover.approve {
     width: 100%;
+}
+
+.adychangecover.approve table.mobile {
+    display: none;
 }
 
 .adychangecover.approve .section {
@@ -24,14 +45,20 @@
     justify-content: center;
     align-items    : center;
     margin-bottom  : 10px;
-    border         : 1px solid lightblue;
-    padding-bottom : 15px;
+    border         : 2px solid #d7f0f9;
     border-radius  : 2px;
 }
 
 .adychangecover.approve .section h2 {
     width         : 100%;
     text-transform: capitalize;
+    margin        : 10px 0;
+}
+
+.adychangecover.approve .section .divider {
+    width : 95%;
+    border: 1px solid #d7f0f9;
+    margin: 0 auto;
 }
 
 .adychangecover.approve table {
@@ -39,6 +66,17 @@
     display        : flex;
     border-spacing : 0 5px;
     border-collapse: separate;
+    margin         : 10px 0;
+}
+
+.adychangecover.approve table tbody {
+    width: inherit;
+}
+
+.adychangecover.approve table tbody tr {
+    width    : inherit;
+    display  : flex;
+    flex-wrap: wrap;
 }
 
 .adychangecover.approve table td {
@@ -65,10 +103,60 @@
 }
 
 .changecover-notifications span {
-    display    : block;
+    display: block;
 }
 
 .changecover-notifications.notifications-on-list {
     height     : 16px;
     margin-left: 2px;
+}
+
+.changecover-nav-container.mobile {
+    display: none;
+}
+
+.changecover-notifications-mobile {
+    display: none;
+}
+
+@media (max-width: 992px) {
+    #inner-wrap {
+        padding: 10px 0 !important;
+    }
+    .adychangecover.message-info {
+        font-size : 10px;
+        text-align: left;
+    }
+    .changecover-nav-container.desktop {
+        display: none;
+    }
+    .changecover-nav-container.mobile {
+        display        : inline-flex;
+        width          : 100%;
+        justify-content: space-between;
+    }
+    .changecover-nav-container.mobile .changecover-notifications {
+        height: 16px;
+    }
+    .changecover-notifications-mobile {
+        display: block;
+    }
+    .changecover-notifications-mobile .changecover-notifications {
+        position : absolute;
+        top      : 10px;
+        left     : 22px;
+        font-size: 13px;
+    }
+    .adychangecover table.desktop {
+        display: none;
+    }
+    .adychangecover.approve table tbody {
+        display  : flex;
+        flex-wrap: wrap;
+    }
+    .adychangecover.approve table tbody tr {
+        width    : 28%;
+        display  : flex;
+        flex-wrap: wrap;
+    }
 }
