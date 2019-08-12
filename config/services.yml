@@ -3,7 +3,6 @@ services:
         class: ady\changecover\controller\main
         arguments:
             - '@ady.changecover.functions'
-            - '@config'
             - '@controller.helper'
             - '@template'
             - '@user'
@@ -14,10 +13,7 @@ services:
     ady.changecover.functions:
         class: ady\changecover\core\functions
         arguments:
-            - '@user'
-            - '@auth'
             - '@dbal.conn'
-            - '@template'
             - '%core.table_prefix%'
             - '%core.root_path%'
     ady.changecover.listener:

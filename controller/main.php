@@ -9,9 +9,6 @@ class main
     /* @var \ady\changecover\core\functions */
     protected $ady_functions;
 
-    /* @var \phpbb\config\config */
-    protected $config;
-
     /* @var \phpbb\controller\helper */
     protected $helper;
 
@@ -37,7 +34,6 @@ class main
      * Constructor
      *
      * @param \ady\changecover\core\functions   $ady_functions
-     * @param \phpbb\config\config              $config
      * @param \phpbb\controller\helper          $helper
      * @param \phpbb\template\template          $template
      * @param \phpbb\user                       $user
@@ -49,7 +45,6 @@ class main
      */
     public function __construct(
         \ady\changecover\core\functions     $ady_functions,
-        \phpbb\config\config                $config,
         \phpbb\controller\helper            $helper,
         \phpbb\template\template            $template,
         \phpbb\user                         $user,
@@ -59,7 +54,6 @@ class main
                                             $table_prefix)
     {
         $this->ady_functions = $ady_functions;
-        $this->config        = $config;
         $this->helper        = $helper;
         $this->template      = $template;
         $this->user          = $user;

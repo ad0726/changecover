@@ -11,17 +11,8 @@ namespace ady\changecover\core;
 
 class functions
 {
-	/** @var user */
-	protected $user;
-
-	/** @var auth */
-	protected $auth;
-
 	/** @var db_interface */
 	protected $db;
-
-	/* @var \phpbb\template\template */
-	protected $template;
 
 	/** @var string table_prefix */
 	protected $table_prefix;
@@ -32,23 +23,17 @@ class functions
 	/**
 	 * Constructor
 	 *
-	 * @param user					$user
-	 * @param auth					$auth
 	 * @param db_interface			$db
      * @param template          	$template
 	 * @param string                $table_prefix
+	 * @param string                $root_path
 	 */
 	public function __construct(
-		\phpbb\user 						$user,
-		\phpbb\auth\auth 					$auth,
 		\phpbb\db\driver\driver_interface 	$db,
-        \phpbb\template\template            $template,
 											$table_prefix,
 											$root_path
     )
 	{
-		$this->user         = $user;
-		$this->auth         = $auth;
 		$this->db           = $db;
 		$this->table_prefix = $table_prefix;
 		$this->root_path    = $root_path;
