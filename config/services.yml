@@ -2,8 +2,23 @@ services:
     ady.changecover.controller:
         class: ady\changecover\controller\main
         arguments:
-            - '@config'
+            - '@ady.changecover.functions'
             - '@controller.helper'
             - '@template'
             - '@user'
+            - '@auth'
+            - '@dbal.conn'
             - '@request'
+            - '%core.table_prefix%'
+    ady.changecover.functions:
+        class: ady\changecover\core\functions
+        arguments:
+            - '@dbal.conn'
+            - '%core.table_prefix%'
+            - '%core.root_path%'
+    ady.changecover.listener:
+        class: ady\changecover\event\listener
+        arguments:
+            - '@ady.changecover.controller'
+        tags:
+            - { name: event.listener }

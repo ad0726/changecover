@@ -1,0 +1,66 @@
+<li>
+    <div class="changecover-nav-container desktop dropdown-container">
+        <a href="#" title="changecover" class="changecover-nav-link-title dropdown-trigger" role="menuitem">
+            <i class="fa fa-window-maximize"></i>
+            <span class="changecover-nav-link">Header</span>
+            <i class="icon fa fa-caret-down changecover-nav-caret" aria-hidden="true"></i>
+        </a>
+        {% if NOTIFICATIONS != 0 %}
+        <a href="/app.php/changecover/approve">
+            <div class="changecover-notifications">
+                <span>{{ NOTIFICATIONS }}</span>
+            </div>
+        </a>
+        {% endif %}
+        <div class="dropdown">
+            <div class="pointer"><div class="pointer-inner"></div></div>
+            <ul class="changecover-nav-menu dropdown-contents" role="menu">
+                <li class="changecover-nav-requester-page">
+                    <a href="/app.php/changecover/request" title="changecover request" role="menuitem">
+                        <i class="icon fa fa-question-circle fa-fw" aria-hidden="true"></i><span>Faire une demande</span>
+                    </a>
+                </li>
+                {% if U_CHANGECOVER_APPROVER %}
+                <li class="changecover-nav-approver-page">
+                    <a href="/app.php/changecover/approve" title="changecover approve" role="menuitem">
+                        <i class="icon fa fa-check-circle fa-fw" aria-hidden="true"></i>
+                        <span>
+                            Valider une demande
+                            {% if NOTIFICATIONS != 0 %}
+                            <div class="changecover-notifications notifications-on-list">
+                                <span>{{ NOTIFICATIONS }}</span>
+                            </div>
+                            {% endif %}
+                        </span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </div>
+    </div>
+    <div class="changecover-nav-container mobile">
+        {% if U_CHANGECOVER_APPROVER %}
+            {% set URL_NAV = "home" %}
+        {% else %}
+            {% set URL_NAV = "request" %}
+        {% endif %}
+        <a href="/app.php/changecover/{{ URL_NAV }}" title="changecover" class="changecover-nav-link-title" role="menuitem">
+            <i class="fa fa-window-maximize"></i>
+            <span class="changecover-nav-link">Header</span>
+        </a>
+        {% if NOTIFICATIONS != 0 %}
+        <a href="/app.php/changecover/approve">
+            <div class="changecover-notifications">
+                <span>{{ NOTIFICATIONS }}</span>
+            </div>
+        </a>
+        {% endif %}
+    </div>
+</li>
+{% if NOTIFICATIONS != 0 %}
+<li class="changecover-notifications-mobile" data-skip-responsive="true" data-select-match="changecover">
+    <div class="changecover-notifications">
+        <span>{{ NOTIFICATIONS }}</span>
+    </div>
+</li>
+{% endif %}

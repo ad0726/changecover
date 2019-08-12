@@ -1,0 +1,21 @@
+<!-- INCLUDE overall_header.html -->
+
+<div class="adychangecover message_success">
+    {% if SUCCESS == "sended" %}
+    <p>Votre requête a bien été envoyé. Un administrateur doit encore la valider.</p>
+    <a href="/app.php/changecover/request">Faire une nouvelle demande</a>
+    |
+    {% elseif SUCCESS == "approved" %}
+    <p>Header à jour.</p>
+    {% if ERROR > 0 %}
+    <p>
+        Cepandant une erreur est survenue.<br>
+        Merci de réessayer ou de contacter un administrateur.<br>
+        Code erreur : APR{{ ERROR }}
+    </p>
+    {% endif %}
+    {% endif %}
+    <a href="/">Retour à l'accueil</a>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

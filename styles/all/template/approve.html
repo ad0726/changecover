@@ -1,0 +1,77 @@
+<!-- INCLUDE overall_header.html -->
+
+{% set THEADS = {
+    'USER'   : 'Demandeur',
+    'COVER'  : 'Cover',
+    'APPROVE': 'Valider',
+    'REMOVE' : 'Supprimer'
+}%}
+
+{% set DISPLAY_SECTION = {
+    'dcrebirth'    : 'DC Rebirth',
+    'dchorsrebirth': 'DC Hors Rebirth',
+    'inde'         : 'Indépendant',
+    'marvel'       : 'Marvel'
+}%}
+
+{% if ALL_REQUEST %}
+<p class="adychangecover message-info">
+    Vous pouvez valider et supprimer plusieurs issues en même temps.<br>
+    Évitez de valider plusieurs demandes pour la même série. Validez l'issue la plus récente et supprimez les autres.<br>
+    Laissons de la place pour tout le monde. Donc évitons qu'il y ait deux issues de la même série à la suite.<br>
+    Faites attention à ce que la cover corresponde bien à sa section. Sinon supprimez la demande.
+</p>
+<form class="adychangecover approve" method="POST" action="">
+    {% for SECTION, REQUEST_BY_SECTION in ALL_REQUEST %}
+    <div class="section">
+        <h2>{{ DISPLAY_SECTION[SECTION] }}</h2>
+        <div class="divider"></div>
+        <table class="desktop">
+            {% for TYPE, THEAD in THEADS %}
+            <tr>
+                <td>
+                    {{ THEAD }}
+                </td>
+                {% for REQUEST in REQUEST_BY_SECTION %}
+                {% if TYPE == 'APPROVE' %}
+                <td>
+                    <input type="radio" name="radio[{{ REQUEST.ID }}]" value="approve">
+                </td>
+                {% elseif TYPE == 'REMOVE' %}
+                <td>
+                    <input type="radio" name="radio[{{ REQUEST.ID }}]" value="remove">
+                </td>
+                {% else %}
+                <td>
+                    {{ REQUEST[TYPE] }}
+                </td>
+                {% endif %}
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </table>
+        <table class="mobile">
+            {% for REQUEST in REQUEST_BY_SECTION %}
+            <tr>
+                <td>
+                    {{ REQUEST.COVER }}
+                    V
+                    <input type="radio" name="radio[{{ REQUEST.ID }}]" value="approve">
+                    S
+                    <input type="radio" name="radio[{{ REQUEST.ID }}]" value="remove">
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+    </div>
+    {% endfor %}
+    <input type="submit" name="post" value="Envoyer">
+</form>
+{% else %}
+<div class="adychangecover">
+    <p>Aucune demande de header actuellement.</p>
+    <a href="/">Retour à l'accueil</a>
+</div>
+{% endif %}
+
+<!-- INCLUDE overall_footer.html -->
