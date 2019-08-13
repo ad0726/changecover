@@ -5,7 +5,7 @@
             <span class="changecover-nav-link">Header</span>
             <i class="icon fa fa-caret-down changecover-nav-caret" aria-hidden="true"></i>
         </a>
-        {% if NOTIFICATIONS != 0 %}
+        {% if U_CHANGECOVER_APPROVER and NOTIFICATIONS != 0 %}
         <a href="/app.php/changecover/approve">
             <div class="changecover-notifications">
                 <span>{{ NOTIFICATIONS }}</span>
@@ -48,7 +48,7 @@
             <i class="fa fa-window-maximize"></i>
             <span class="changecover-nav-link">Header</span>
         </a>
-        {% if NOTIFICATIONS != 0 %}
+        {% if U_CHANGECOVER_APPROVER and NOTIFICATIONS != 0 %}
         <a href="/app.php/changecover/approve">
             <div class="changecover-notifications">
                 <span>{{ NOTIFICATIONS }}</span>
@@ -57,7 +57,7 @@
         {% endif %}
     </div>
 </li>
-{% if NOTIFICATIONS != 0 %}
+{% if U_CHANGECOVER_APPROVER and NOTIFICATIONS != 0 %}
 <li class="changecover-notifications-mobile" data-skip-responsive="true" data-select-match="changecover">
     <div class="changecover-notifications">
         <span>{{ NOTIFICATIONS }}</span>
