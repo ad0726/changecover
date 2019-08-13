@@ -1,7 +1,9 @@
 <!-- INCLUDE overall_header.html -->
 
 <div class="adychangecover message_error">
+    {% if ERROR %}
     <h3>Code erreur : APR{{ ERROR }}</h3>
+    {% endif %}
     <p>Une erreur est survenue. Contactez un administrateur.</p>
     <a href="/">Retour à l'accueil</a>
 </div>

@@ -124,6 +124,7 @@ class main
             }
         } else {
             if ($path === 'request') {
+                $error      = 0;
                 $urlRelease = $this->request->variable('url'    , '', true);
                 $section    = $this->request->variable('section', '', true);
                 $file       = $this->request->file('cover');
@@ -141,6 +142,11 @@ class main
                     $sql = 'INSERT INTO ' . $this->table_prefix . 'changecover_toapprove ' . $this->db->sql_build_array('INSERT', $dataToDB);
 
                     if (!$this->db->sql_query($sql)) {
+                        $error = 2;
+                        // Output the page
+                        $this->template->assign_vars([
+                            "ERROR" => $error
+                        ]);
                         return $this->helper->render('error.html', "Header Error");
                     } else {
                         // Output the page
@@ -151,6 +157,11 @@ class main
                     }
 
                 } else {
+                    $error = 1;
+                    // Output the page
+                    $this->template->assign_vars([
+                        "ERROR" => $error
+                    ]);
                     return $this->helper->render('error.html', "Header Error");
                 }
 
