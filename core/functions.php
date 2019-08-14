@@ -215,7 +215,7 @@ class functions
 		// VERIF UPLOAD
 		if ($file['error'] > 0) $error[1] = "Pas de cover transférée.\n";
 		// VERIF WEIGHT
-		$maxsize = 1048576;
+		$maxsize = 5242880;
 		if ($file['size'] > $maxsize) $error[2] = "Le fichier est trop gros.\n";
 		// VERIF EXTENSION
 		$img_ext_ok = ['jpg', 'jpeg', 'png'];
