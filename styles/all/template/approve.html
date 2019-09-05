@@ -54,6 +54,7 @@
             {% for REQUEST in REQUEST_BY_SECTION %}
             <tr>
                 <td>
+                    {{ REQUEST.USER }}
                     {{ REQUEST.COVER }}
                     V
                     <input type="radio" name="radio[{{ REQUEST.ID }}]" value="approve">
