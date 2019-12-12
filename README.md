@@ -1,3 +1,5 @@
+https://gitlab.com/adynemo/changecover
+
 phpBB Extension - changecover
 =====================
 
