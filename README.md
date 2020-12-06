@@ -1,4 +1,4 @@
-https://gitlab.com/adynemo/changecover
+Migrate to https://gitlab.com/adynemo/changecover
 
 phpBB Extension - changecover
 =====================
